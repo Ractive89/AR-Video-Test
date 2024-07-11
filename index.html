@@ -1,52 +1,43 @@
+<!DOCTYPE html>
 <html>
-<script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
-<script src="https://jeromeetienne.github.io/AR.js/aframe/build/aframe-ar.js"></script>
 
 <head>
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Image based tracking AR.js demo</title>
+  <!-- import aframe and then ar.js with image tracking / location based features -->
+  <script src="https://aframe.io/releases/1.0.4/aframe.min.js"></script>
+  <script src="https://raw.githack.com/AR-js-org/AR.js/master/aframe/build/aframe-ar-nft.js"></script>
   <link rel="stylesheet" type="text/css" href="index.css">
 </head>
 
-<body>
-  <a id="playButton" onclick="play('alpha')">
-    <div class="btn btn-primary play-overlay menu-overlay"></div>
-  </a>
+<body style="margin : 0px; overflow: hidden;">
+  <!-- minimal loader shown until image descriptors are loaded. Loading may take a while according to the device computational power -->
+  <div class="arjs-loader">
+    <div>Loading, please wait...</div>
+  </div>
 
-  <a-scene arjs='sourceType:image;sourceUrl: assets/Target.jpg'>
-    
+  <!-- a-frame scene -->
+  <a-scene vr-mode-ui="enabled: false;" renderer="logarithmicDepthBuffer: true;" embedded
+    arjs="trackingMethod: best; sourceType: webcam;debugUIEnabled: false;">
+
     <a-assets>
-      <video id="alpha" autoplay loop="true" src="assets/Active.mp4"></video>
+      <video id="videoActive" preload="auto" src="./assets/Active.mp4" width="148" height="108" autoplay loop="true"
+        crossOrigin="anonymous" muted></video>
     </a-assets>
-
-    <a-marker-camera preset='hiro'>
-      <a-video id="vid" src="#alpha">
-        <video scale="20 20 1" src="#source"></video></a-video>
-    </a-marker-camera>
-
+    <!-- a-nft is the anchor that defines an Image Tracking entity -->
+    <!-- on 'url' use the path to the Image Descriptors created before. -->
+    <!-- the path should end with the name without the extension e.g. if file is trex.fset' the path should end with trex -->
+    <a-nft type="nft" url="./assets/Target" smooth="true" smoothCount="10" smoothTolerance=".01"
+      smoothThreshold="5">
+      <!-- as a child of the a-nft entity, you can define the content to show. here's a GLTF model entity -->
+      <a-entity material="shader: flat; src: #videoActive" geometry="primitive: plane; width: 148; height: 108;"
+        position="0 60 -250" rotation="0 35 0" play-on-click visible="false">
+      </a-entity>
+    </a-nft>
+    <!-- static camera that moves according to the device movemenents -->
+    <a-entity camera></a-entity>
   </a-scene>
 </body>
-
-<script>
-
-  function play(id) {
-    var aVideoAsset = document.querySelector('#' + id);
-    aVideoAsset.play().catch(function (error) {
-      aVideoAsset.pause();
-      hideOrShow("playButton");
-
-    });
-    aVideoAsset.setAttribute('loop', 'false');
-    hideOrShow('playButton');
-  }
-
-  function hideOrShow(id) {
-    var x = document.getElementById(id);
-    if (x.style.display === "none") {
-      x.style.display = "block";
-    } else {
-      x.style.display = "none";
-    }
-  }
-
-</script>
 
 </html>
