@@ -1,4 +1,4 @@
-.arjs-loader {
+  .arjs-loader {
     height: 100%;
     width: 100%;
     position: absolute;
@@ -9,10 +9,10 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.arjs-loader div {
+  }
+ 
+  .arjs-loader div {
     text-align: center;
     font-size: 1.25em;
     color: white;
-}
+  }
